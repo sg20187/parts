@@ -9,6 +9,7 @@ public class RobotPartBean {
 	private String manufacturer;
 	private double weight;
 	private List<Long> compatibleParts;
+	private List<Long> partsCompatibleWith;
 	
 	public long getSerialNumber() {
 		return serialNumber;
@@ -40,6 +41,10 @@ public class RobotPartBean {
 	public void setCompatibleParts(List<Long> compatibleParts) {
 		this.compatibleParts = compatibleParts;
 	}
-	
-	
+	public List<Long> getPartsCompatibleWith() {
+		return partsCompatibleWith;
+	}
+	public void setPartsCompatibleWith(List<Long> partsCompatibleWith) {
+		this.partsCompatibleWith = partsCompatibleWith;
+	}
 }

@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 public class RobotParts
@@ -25,17 +23,6 @@ public class RobotParts
 	private String manufacturer;
 	private double weight;
 	
-/*	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable (name = "COMPATIBLE_ROBOT_PARTS", 
-		joinColumns = { @JoinColumn ( name = "SERIAL_NUMBER" ) }, 
-		inverseJoinColumns = { @JoinColumn ( name = "COMPATIBLE_SERIAL_NUMBER" ) } )
-	private Set < RobotParts > robotParts  = new HashSet < RobotParts > ( );			//robotParts
-	
-	@ManyToMany ( mappedBy = "robotParts" )
-	 @JsonIgnore
-	private Set < RobotParts > compatibleRobotParts = new HashSet < RobotParts > ( );   //compatibleRobotParts
-*/	
-	
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable (name = "COMPATIBLE_ROBOT_PARTS", joinColumns = { 
 	@JoinColumn ( name = "SERIAL_NUMBER", referencedColumnName = "serialNumber", nullable = false ) }, inverseJoinColumns = { 
@@ -43,8 +30,7 @@ public class RobotParts
 	private Set < RobotParts > compatibleParts  = new HashSet < RobotParts > ( );			
 	
 	@ManyToMany ( mappedBy = "compatibleParts" )
-	//@JsonIgnore
-	private Set < RobotParts > compatibleTo = new HashSet < RobotParts > ( );   
+	private Set < RobotParts > partsCompatibleWith = new HashSet < RobotParts > ( );   
 	
 	public long getSerialNumber() {
 		return serialNumber;
@@ -76,12 +62,10 @@ public class RobotParts
 	public void setCompatibleParts(Set<RobotParts> compatibleParts) {
 		this.compatibleParts = compatibleParts;
 	}
-	public Set<RobotParts> getCompatibleTo() {
-		return compatibleTo;
+	public Set<RobotParts> getPartsCompatibleWith() {
+		return partsCompatibleWith;
 	}
-	public void setCompatibleTo(Set<RobotParts> compatibleTo) {
-		this.compatibleTo = compatibleTo;
+	public void setPartsCompatibleWith(Set<RobotParts> partsCompatibleWith) {
+		this.partsCompatibleWith = partsCompatibleWith;
 	}
-	
-	
 }

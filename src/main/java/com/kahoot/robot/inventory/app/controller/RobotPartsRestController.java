@@ -66,7 +66,6 @@ public class RobotPartsRestController
 			Optional < RobotParts > robotOptional = robotPartRepository.findById ( partId );
 			if ( robotOptional.isPresent ( ) ){
 				RobotParts part = robotOptional.get();
-				part.setSerialNumber(partId);
 				compatibleParts.add(part);
 			}
 		}
@@ -81,7 +80,7 @@ public class RobotPartsRestController
 
 	}
 	
-	@PutMapping ( "/{id}" )
+/*	@PutMapping ( "/{id}" )
 	public ResponseEntity < Object > update ( @RequestBody RobotParts robotParts, @PathVariable long id )
 	{
 
@@ -95,8 +94,39 @@ public class RobotPartsRestController
 		robotPartRepository.save ( robotParts );
 
 		return ResponseEntity.ok().build ( );
-	}
+	}*/
 
+	
+	@PutMapping 
+	public ResponseEntity < Object > update ( @RequestBody RobotPartBean partBean )
+	{
+
+		Optional < RobotParts > robotOptional = robotPartRepository.findById ( partBean.getSerialNumber() );
+
+		if ( !robotOptional.isPresent ( ) )
+			return ResponseEntity.notFound ( ).build ( );
+
+		RobotParts part = robotOptional.get();
+		part.setWeight(partBean.getWeight());
+		part.setName(partBean.getName());
+		part.setManufacturer(partBean.getManufacturer());
+		Set < RobotParts > compatibleParts = new HashSet<>();
+		if(null != partBean.getCompatibleParts() && !partBean.getCompatibleParts().isEmpty()){
+			Iterator<Long> itr = partBean.getCompatibleParts().iterator();
+			while(itr.hasNext()){
+				Optional < RobotParts > partOptional = robotPartRepository.findById ( itr.next() );
+				if ( partOptional.isPresent ( ) ){
+					compatibleParts.add(partOptional.get());
+				}
+			}
+		}	
+		part.setCompatibleParts(compatibleParts);
+		
+		robotPartRepository.save ( part );
+
+		return ResponseEntity.ok().build ( );
+	}
+	
 /*	@GetMapping ( "/{serialNumber}" )
 	public RobotParts read ( @PathVariable long serialNumber )
 	{
@@ -132,6 +162,13 @@ public class RobotPartsRestController
 			compatibleParts.add(itr.next().getSerialNumber());
 		}
 		bean.setCompatibleParts(compatibleParts);
+		
+		List<Long> partsCompatibleWith = new ArrayList<>();
+		Iterator<RobotParts> itr1 = part.getPartsCompatibleWith().iterator();
+		while(itr1.hasNext()){
+			partsCompatibleWith.add(itr1.next().getSerialNumber());
+		}
+		bean.setPartsCompatibleWith(partsCompatibleWith);
 		return bean;
 	}	
 	
@@ -160,6 +197,14 @@ public class RobotPartsRestController
 				compatibleParts.add(itr.next().getSerialNumber());
 			}
 			bean.setCompatibleParts(compatibleParts);
+			
+			List<Long> partsCompatibleWith = new ArrayList<>();
+			Iterator<RobotParts> itr1 = part.getPartsCompatibleWith().iterator();
+			while(itr1.hasNext()){
+				partsCompatibleWith.add(itr1.next().getSerialNumber());
+			}
+			bean.setPartsCompatibleWith(partsCompatibleWith);
+			
 			partsList.add(bean);
 		}
 		return partsList;
@@ -184,19 +229,18 @@ public class RobotPartsRestController
 	@GetMapping ( "/temp" )
 	public void temp ()
 	{
-		 Employee employee1 = new Employee("Sergey", "Brin");
-	        Employee employee2 = new Employee("Larry", "Page");
-	        Employee employee3 = new Employee("Marrisa", "Mayer");
-	        Employee employee4 = new Employee("Matt", "Cutts");
+		Employee employee1 = new Employee("Sergey", "Brin");
+        Employee employee2 = new Employee("Larry", "Page");
+        Employee employee3 = new Employee("Marrisa", "Mayer");
+        Employee employee4 = new Employee("Matt", "Cutts");
 
-	        employee1.getColleagues().add(employee3);
-	        employee1.getColleagues().add(employee4);
-	        employee2.getColleagues().add(employee4);
-	        employee3.getColleagues().add(employee4);
-	        employee4.getColleagues().add(employee1);
-	        employee4.getColleagues().add(employee3);
-	        
-	        
+        employee1.getColleagues().add(employee3);
+        employee1.getColleagues().add(employee4);
+        employee2.getColleagues().add(employee4);
+        employee3.getColleagues().add(employee4);
+        employee4.getColleagues().add(employee1);
+        employee4.getColleagues().add(employee3);
+
 		empRepo.save (employee1 );
 		empRepo.save (employee2 );
 		empRepo.save (employee3 );
@@ -208,5 +252,25 @@ public class RobotPartsRestController
 	{
 
 		return empRepo.findAll ( );
+	}
+	
+	@GetMapping ("/tempget/{id}")
+	public void tempgetid ( @PathVariable long id)
+	{
+
+		Optional < Employee > empl = empRepo.findById ( id );
+		if ( empl.isPresent ( ) ){
+			Employee emp = empl.get();
+			System.out.println(emp.getFirstname());
+			System.out.println("colleagues: ");
+			Set<Employee> empSet = emp.getColleagues();
+			empSet.stream().forEach((e) -> System.out.println(e.getFirstname()));
+			System.out.println("teammates: ");
+			Set<Employee> teamSet = emp.getTeammates();
+			teamSet.stream().forEach((e) -> System.out.println(e.getFirstname()));	
+		}else{
+			System.out.println("not found *******");
+		}
+
 	}
 }

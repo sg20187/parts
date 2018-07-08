@@ -18,11 +18,10 @@ insert into Robot_Parts values (10009, 'Logic Level Converter Bidirectional', 'S
 
 insert into Robot_Parts values (10010, 'Raspberry Pi 3 Computer Board', 'Raspberry Pi', 175.00);
 
---insert into COMPATIBLE_ROBOT_PARTS values (10001, 10004);
---insert into COMPATIBLE_ROBOT_PARTS values (10001, 10002);
---insert into COMPATIBLE_ROBOT_PARTS values (10002, 10003);
---insert into COMPATIBLE_ROBOT_PARTS values (10003, 10002);
---insert into COMPATIBLE_ROBOT_PARTS values (10004, 10001);
---insert into COMPATIBLE_ROBOT_PARTS values (10006, 10007);
---insert into COMPATIBLE_ROBOT_PARTS values (10008, 10007);
+insert into COMPATIBLE_ROBOT_PARTS values (10001, 10004);
+insert into COMPATIBLE_ROBOT_PARTS values (10001, 10002);
+insert into COMPATIBLE_ROBOT_PARTS values (10002, 10003);
+insert into COMPATIBLE_ROBOT_PARTS values (10003, 10002);
+insert into COMPATIBLE_ROBOT_PARTS values (10006, 10007);
+insert into COMPATIBLE_ROBOT_PARTS values (10008, 10007);
 
